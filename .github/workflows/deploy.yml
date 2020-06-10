@@ -1,0 +1,97 @@
+name: Deploy
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  create_release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+    steps:
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+  deploy:
+    needs: create_release
+    name: Deploy Release Builds
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Make binaries
+        uses: sosedoff/actions/golang-build@master
+        env:
+          COMPRESS_FILES: true
+
+      - name: Upload lab_darwin_386.zip
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create_release.outputs.upload_url }}
+          asset_path: .release/lab_darwin_386.zip
+          asset_name: lab_darwin_386.zip
+          asset_content_type: application/zip
+
+      - name: Upload lab_darwin_amd64.zip
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create_release.outputs.upload_url }}
+          asset_path: .release/lab_darwin_amd64.zip
+          asset_name: lab_darwin_amd64.zip
+          asset_content_type: application/zip
+
+      - name: Upload lab_linux_386.zip
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create_release.outputs.upload_url }}
+          asset_path: .release/lab_linux_386.zip
+          asset_name: lab_linux_386.zip
+          asset_content_type: application/zip
+
+      - name: Upload lab_linux_amd64.zip
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create_release.outputs.upload_url }}
+          asset_path: .release/lab_linux_amd64.zip
+          asset_name: lab_linux_amd64.zip
+          asset_content_type: application/zip
+
+      - name: Upload lab_windows_386.zip
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create_release.outputs.upload_url }}
+          asset_path: .release/lab_windows_386.zip
+          asset_name: lab_windows_386.zip
+          asset_content_type: application/zip
+
+      - name: Upload lab_windows_amd64.zip
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create_release.outputs.upload_url }}
+          asset_path: .release/lab_windows_amd64.zip
+          asset_name: lab_windows_amd64.zip
+          asset_content_type: application/zip

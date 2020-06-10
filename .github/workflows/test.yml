@@ -1,0 +1,21 @@
+name: Test
+
+on: pull_request
+
+jobs:
+  test:
+    name: test on ${{ matrix.os }} with Go ${{ matrix.go }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+        go: ["1.14", "1.13", "1.12"]
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go }}
+
+      - run: go test ./...
