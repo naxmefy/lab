@@ -2,6 +2,9 @@ name: Test
 
 on: push
 
+env:
+  CC_TEST_REPORTER_ID: ${{ secrets.CODE_CLIMATE_ID }}
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -12,15 +15,11 @@ jobs:
         with:
           go-version: 1.14
 
-      - name: download cc test reporter
-        run: |
-          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-0.6.3-linux-amd64 > ./cc-test-reporter
-          chmod +x ./cc-test-reporter
-          GIT_BRANCH=$GITHUB_REF GIT_COMMIT_SHA=$GITHUB_SHA ./cc-test-reporter before-build
+      - run: go get -v go get github.com/axw/gocov/gocov
+      - run: go get -v go get github.com/codeclimate/test-reporter
 
-      - run: go test -coverprofile c.out ./...
+      - run: GIT_BRANCH=$GITHUB_REF GIT_COMMIT_SHA=$GITHUB_SHA test-reporter before-build
 
-      - name: report coverage
-        run: GIT_BRANCH=$GITHUB_REF GIT_COMMIT_SHA=$GITHUB_SHA ./cc-test-reporter after-build -t gcov
-        env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CODE_CLIMATE_ID }}
+      - run: gocov test ./...
+
+      - run: GIT_BRANCH=$GITHUB_REF GIT_COMMIT_SHA=$GITHUB_SHA test-reporter after-build -t gocov
