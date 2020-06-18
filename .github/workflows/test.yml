@@ -4,6 +4,8 @@ on: push
 
 env:
   CC_TEST_REPORTER_ID: ${{ secrets.CODE_CLIMATE_ID }}
+  GIT_BRANCH: ${{ github.ref }}
+  GIT_COMMIT_SHA: ${{ github.sha }}
 
 jobs:
   test:
@@ -22,8 +24,9 @@ jobs:
             curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
             chmod +x ./cc-test-reporter
 
-      - run: GIT_BRANCH=$GITHUB_REF GIT_COMMIT_SHA=$GITHUB_SHA ./cc-test-reporter before-build
+      - run: ./cc-test-reporter before-build
 
-      - run: gocov test ./...
+      - run: gocov test -coverprofile=out ./...
 
-      - run: GIT_BRANCH=$GITHUB_REF GIT_COMMIT_SHA=$GITHUB_SHA ./cc-test-reporter after-build -t gocov
+      - run: ./cc-test-reporter format-coverage --input-type gocov out
+      - run: ./cc-test-reporter after-build -t gocov
