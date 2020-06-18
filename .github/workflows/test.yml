@@ -16,10 +16,14 @@ jobs:
           go-version: 1.14
 
       - run: go get -v github.com/axw/gocov/gocov
-      - run: go get -v github.com/codeclimate/test-reporter
 
-      - run: GIT_BRANCH=$GITHUB_REF GIT_COMMIT_SHA=$GITHUB_SHA test-reporter before-build
+      - name: download cc test reporter
+        run: |
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter
+
+      - run: GIT_BRANCH=$GITHUB_REF GIT_COMMIT_SHA=$GITHUB_SHA ./cc-test-reporter before-build
 
       - run: gocov test ./...
 
-      - run: GIT_BRANCH=$GITHUB_REF GIT_COMMIT_SHA=$GITHUB_SHA test-reporter after-build -t gocov
+      - run: GIT_BRANCH=$GITHUB_REF GIT_COMMIT_SHA=$GITHUB_SHA ./cc-test-reporter after-build -t gocov
