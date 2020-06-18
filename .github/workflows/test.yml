@@ -28,4 +28,4 @@ jobs:
       - run: ./cc-test-reporter before-build
       - run: gocov test ./... | gocov-xml > coverage.xml
       - run: ./cc-test-reporter format-coverage -t cobertura coverage.xml
-      - run: ./cc-test-reporter after-build -t gocov
+      - run: ./cc-test-reporter after-build
