@@ -5,6 +5,8 @@ a simple to manage labs (simple monorepos)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/naxmefy/lab)
 ![Test](https://github.com/naxmefy/lab/workflows/Test/badge.svg)
 
+[![Maintainability](https://api.codeclimate.com/v1/badges/e23d4f3fc4adb689473d/maintainability)](https://codeclimate.com/github/naxmefy/lab/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/e23d4f3fc4adb689473d/test_coverage)](https://codeclimate.com/github/naxmefy/lab/test_coverage)
 ## base structure of a lab
 
 ```base
