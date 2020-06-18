@@ -23,5 +23,4 @@ jobs:
           CC_TEST_REPORTER_ID: ${{ secrets.CODE_CLIMATE_ID }}
         with:
           coverageCommand: go test -coverprofile c.out ./...
-          coverageLocations: |
-            ${{github.workspace}}/c.out:gocov
+          coverageLocations: ${{github.workspace}}/c.out:gocov
