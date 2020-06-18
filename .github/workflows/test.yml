@@ -19,7 +19,7 @@ jobs:
           go-version: ${{ matrix.go }}
 
       - uses: paambaati/codeclimate-action@v2.2.4
-          env:
-            CC_TEST_REPORTER_ID: ${{ secrets.CODE_CLIMATE_ID }}
-          with:
-            coverageCommand: go test -coverprofile c.out ./...
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CODE_CLIMATE_ID }}
+        with:
+          coverageCommand: go test -coverprofile c.out ./...
